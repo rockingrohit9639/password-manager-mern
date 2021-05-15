@@ -1,0 +1,149 @@
+.login {
+  width: 100%;
+  height: 93vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+}
+
+.login::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background-color: #ff1f5a;
+  z-index: -1;
+}
+
+.login::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background-color: #1e2a78;
+  z-index: -1;
+}
+
+.login__wrapper {
+  width: 85%;
+  height: 80%;
+  background-color: var(--secondary-bg);
+  border-radius: 13px;
+}
+
+.login_left {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  color: var(--primary-bg);
+}
+
+.inputs input {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+.login_left button {
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  background-color: var(--primary-bg);
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+.login_right {
+  display: none;
+}
+
+@media only screen and (min-width: 900px) {
+  .login__wrapper {
+    display: flex;
+  }
+
+  .login_left {
+    background-color: #1e2a78;
+    flex: 40%;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+
+  .login_right {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex: 60%;
+    padding: 3rem;
+    background-color: #ff1f5a;
+    position: relative;
+  }
+
+  .login_right img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .login__content {
+      z-index: 1;
+      color: #eeeeee;
+  }
+
+  .inputs label {
+    color: #eeeeee;
+  }
+
+  .login__content h1 {
+    font-size: 4rem;
+    font-weight: bolder;
+    color: #eeeeee;
+  }
+
+  .login__content h4 {
+      font-weight: normal;
+  }
+
+  .login__content p {
+    font-size: 1.5rem;
+  }
+
+  .login__content a:nth-child(1) {
+      color: #ff1f5a;
+      border-bottom: 2px solid #ff4476a8;
+  }
+
+  .attr {
+      color: #fdfdfda1;
+      position: absolute;
+      bottom: 1rem;
+      left: 3rem;
+      font-size: 0.5rem;
+    }
+
+  .inputs {
+    width: 90%;
+  }
+}

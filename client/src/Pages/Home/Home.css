@@ -1,0 +1,49 @@
+.home {
+    width: 100%;
+    height: 93vh;
+    padding: 2rem;
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg stroke='%23CCC' stroke-width='0' %3E%3Crect fill='%23F5F5F5' x='-60' y='-60' width='110' height='240'/%3E%3C/g%3E%3C/svg%3E");display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.name {
+    color: inherit;
+	text-decoration: none;
+	box-shadow: inset 0 -.1em 0 0 #ddd;
+	transition-property: box-shadow, color;
+	transition-duration: .2s, .4s;
+}
+
+.name:hover {
+	color: #888;
+	box-shadow: inset 0 -.25em 0 0 #ddd;
+}
+
+.home__left p {
+    margin-top: 2rem;
+}
+
+.home__left a {
+    display: block;
+    margin-top: 2rem;
+    color: #000;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    background: #4ae3b5;
+    box-shadow: 0 23px 25px -9px #4ae3b5;
+    position: relative;
+}
+
+.home__left a:hover {
+    color: #fff;
+}
+
+.home__right {
+    display: none;
+}

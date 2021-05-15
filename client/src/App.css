@@ -1,0 +1,10 @@
+*, *::before, *::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-bg: #171332;
+    --secondary-bg: #4ae3b5;
+}
