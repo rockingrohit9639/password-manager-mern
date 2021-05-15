@@ -28,6 +28,22 @@ const schema = new mongoose.Schema({
                 required: true
             }
         }
+    ],
+    passwords: [
+        {
+            password: {
+                type: String,
+                required: true
+            },
+            platform: {
+                type: String,
+                required: true
+            },
+            platEmail: {
+                type: String,
+                required: true
+            }
+        }
     ]
 });
 
@@ -58,6 +74,22 @@ schema.methods.generateAuthToken = async function ()
     catch (error)
     {
         console.log(error)
+    }
+}
+
+// SVING NEW PASSWORD
+schema.methods.addNewPassword = async function (userPass, platform, platEmail)
+{
+    try
+    {
+        this.passwords = this.passwords.concat({ password: userPass, platform: platform, platEmail: platEmail });
+        await this.save();
+        return true;
+    }
+    catch (err)
+    {
+        console.log(err);
+        return false;
     }
 }
 

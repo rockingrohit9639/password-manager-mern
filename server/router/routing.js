@@ -99,5 +99,63 @@ router.get("/authenticate", authenticate, async (req, res) =>
     res.send(req.rootUser);
 })
 
+router.post("/addnewpassword", authenticate, async (req, res) =>
+{
+    const { platform, userPass, userEmail, platEmail } = req.body;
+
+    if (!platform || !userPass || !userEmail)
+    {
+        return res.status(400).json({ error: "Please fill the form properly" });
+    }
+
+    try
+    {
+        const rootUser = req.rootUser;
+
+        const isSaved = rootUser.addNewPassword(userPass, platform, platEmail);
+
+        if (isSaved)
+        {
+            return res.status(200).json({message: "Successfully added your password."})
+        }
+        else
+        {
+            return res.status(400).json({error: "Could not save the password."})
+        }
+    }
+    catch (error)
+    {
+        console.log(error)
+    }
+
+    return res.status(400).json({error: "An unknown error occured."})
+})
+
+router.post("/deletepassword", authenticate,  async (req, res) =>
+{
+    const { id } = req.body;
+
+    if (!id)
+    {
+        return res.status(400).json({error: "Could not find data"})
+    }
+
+    try
+    {
+        const rootUser = req.rootUser;
+        const isDeleted = await User.updateOne({ email: rootUser.email }, { $pull: { passwords: { _id : id }}});
+
+        if (!isDeleted)
+        {
+            return res.status(400).json({error: "Could not delete the password."})
+        }
+
+        return res.status(200).json({"message": "Successfully deleted your password."})
+    }
+    catch(err) {
+        console.log(err);
+    }
+})
+
 
 module.exports = router;
