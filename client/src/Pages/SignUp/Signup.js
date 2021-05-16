@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import "./Signup.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import img from "../../static/signup.jpg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function Signup()
 {
+    const history = useHistory();
     const [userData, setUserData] = useState({
         name: "",
         email: "",
@@ -37,10 +40,19 @@ function Signup()
                 body: JSON.stringify(userData)
             });
 
+            const jsonRes = await res.json();
+
             if (res.status === 400)
             {
-                let json = await res.json();
-                window.alert(json.error);
+                toast.error(jsonRes.error, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
             else if (res.status === 201)
             {
@@ -51,8 +63,18 @@ function Signup()
                     cpassword: ""
                 });
 
-                let json = await res.json();
-                window.alert(json.message);
+                toast.success(jsonRes.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+                history.push("/signin");
+                
             }
         }
         catch (error)
@@ -63,6 +85,7 @@ function Signup()
 
     return (
         <div className="signup">
+            <ToastContainer />
             <div className="signup__wrapper">
 
 

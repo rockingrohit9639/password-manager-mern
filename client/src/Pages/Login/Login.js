@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 import img from "../../static/login.jpg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Login()
@@ -16,7 +18,7 @@ function Login()
     const handleChange = (e) =>
     {
         const { name, value } = e.target;
-        
+
         setUserData((prevData) =>
         {
             return {
@@ -35,6 +37,7 @@ function Login()
                 redirect: 'follow',
                 credentials: 'include',
                 headers: {
+                    Accept: "application/json",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(userData)
@@ -44,11 +47,18 @@ function Login()
 
             if (res.status === 400)
             {
-                window.alert(json.error);
+                toast.error(json.error, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
             else if (res.status === 200)
             {
-                window.alert(json.message);
                 history.push("/");
             }
         }
@@ -61,8 +71,22 @@ function Login()
 
     return (
         <div className="login">
+            
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+            <ToastContainer />
+
             <div className="login__wrapper">
-                
+
 
                 <div className="login_left">
                     <div className="inputs">
@@ -81,19 +105,19 @@ function Login()
                     <img src={img} alt="login.jpg" />
 
                     <div className="login__content">
-                    <h1> Login </h1>
-                    <h4> Get your password secured with us for free. </h4>
+                        <h1> Login </h1>
+                        <h4> Get your password secured with us for free. </h4>
 
-                    <p> Did not have any Account?
+                        <p> Did not have any Account?
                     <Link to="/signup"> Signup </Link> </p>
-                    
-                    
-                    <a className="attr" href='https://www.freepik.com/vectors/star' target="_blank">Star vector created by vectorpouch - www.freepik.com</a>
+
+
+                        <a className="attr" href='https://www.freepik.com/vectors/star' target="_blank">Star vector created by vectorpouch - www.freepik.com</a>
 
                     </div>
                 </div>
-            
-            
+
+
             </div>
         </div>
     )

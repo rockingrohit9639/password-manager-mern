@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
-
 function Home()
 {
     const [isAuthenticated, setAuth] = useState(false);
@@ -27,7 +26,7 @@ function Home()
             }
             else
             {
-                const { name, email } = json;
+                const { name } = json;
                 setAuth(true);
 
                 setName(name);

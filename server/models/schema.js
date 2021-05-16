@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { encrypt, decrypt } = require('./EncDecManager');
 
 const schema = new mongoose.Schema({
     name: {
@@ -42,6 +43,9 @@ const schema = new mongoose.Schema({
             platEmail: {
                 type: String,
                 required: true
+            },
+            iv: {
+                type: String,
             }
         }
     ]
@@ -78,11 +82,11 @@ schema.methods.generateAuthToken = async function ()
 }
 
 // SVING NEW PASSWORD
-schema.methods.addNewPassword = async function (userPass, platform, platEmail)
+schema.methods.addNewPassword = async function (userPass, iv, platform, platEmail)
 {
     try
     {
-        this.passwords = this.passwords.concat({ password: userPass, platform: platform, platEmail: platEmail });
+        this.passwords = this.passwords.concat({ password: userPass, platform: platform, platEmail: platEmail, iv: iv });
         await this.save();
         return true;
     }

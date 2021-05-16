@@ -8,7 +8,7 @@ import "./Navbar.css";
 function Navbar()
 {
     const [isAuthenticated, setAuth] = useState(false);
-    const [name, setName] = useState("");
+
     const verifyUser = async () =>
     {
         try
@@ -22,19 +22,13 @@ function Navbar()
                 credentials: "include",
             });
 
-            const json = await res.json();
-
             if (res.status === 400)
             {
                 setAuth(false);
             }
             else
             {
-                const { name } = json;
                 setAuth(true);
-
-                setName(name);
-
             }
         }
         catch (error)
@@ -46,6 +40,7 @@ function Navbar()
     {
         verifyUser();
     }, []);
+    
     const menu = useRef();
     const [ isOpen, setIsOpen ] = useState(false);
 
@@ -80,11 +75,13 @@ function Navbar()
                     <li className="back_btn"> <FontAwesomeIcon icon={faArrowLeft} onClick={handleMenu} /> </li>
                     <li> <Link to="/"> Home </Link> </li>
                     <li> <Link to="/passwords"> Passwords </Link> </li>
+                    { !isAuthenticated ? <li> <Link to="/signin"> Login </Link> </li> : null}
                     {
-                        isAuthenticated ? null
+                        isAuthenticated ? (<li> <Link to="/logout"> Logout </Link> </li>)
                             :
                             (<li> <Link to="/signup"> SignUp </Link> </li>)
                     }
+
                     <li> <Link to="/about"> AboutUs </Link> </li>
                 </ul>
 

@@ -4,6 +4,8 @@ import Password from './Password';
 import "./Passwords.css";
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 
 function Passwords()
@@ -41,12 +43,13 @@ function Passwords()
 
             if (res.status === 400)
             {
-                window.alert("User is not authenticated.");
                 history.push("/signin");
             }
             else
             {
                 const { name, passwords, email } = jsonRes;
+
+                console.log(passwords)
 
                 setName(name);
                 setUserEmail(email)
@@ -80,7 +83,15 @@ function Passwords()
 
             if (res.status === 400)
             {
-                window.alert(jsonRes.error);
+                toast.error(jsonRes.error, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
             else if (res.status === 200)
             {
@@ -88,7 +99,16 @@ function Passwords()
                 setPlatEmail("");
                 setUserPass("");
                 setOpen(false);
-                window.alert(jsonRes.message);
+                
+                toast.success(jsonRes.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 verifyUser();
             }
         }
@@ -105,6 +125,7 @@ function Passwords()
 
     return (
         <div className="passwords">
+            <ToastContainer />
             <h1> Welcome <span className="name"> { name } </span> </h1>
 
             <div className="modal">
@@ -143,7 +164,15 @@ function Passwords()
                 { userPasswords.length !== 0 ? userPasswords?.map((data) =>
                 {
                     return (
-                        <Password key={data._id} id={data._id} name={data.platform} password={data.password} email={data.platEmail} verifyUser={verifyUser} />
+                        <Password
+                            key={data._id}
+                            id={data._id}
+                            name={data.platform}
+                            password={data.password}
+                            email={data.platEmail}
+                            iv={data.iv}
+                            verifyUser={verifyUser}    
+                        />
                     )
                 }) :
                     

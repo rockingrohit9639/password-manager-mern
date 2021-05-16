@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/schema");
 const bcrypt = require("bcrypt");
 const authenticate = require("../middlewares/authenticate");
+const { encrypt, decrypt } = require("../models/EncDecManager");
 
 router.post("/register", async (req, res) =>
 {
@@ -71,13 +72,13 @@ router.post("/login", async (req, res) =>
 
         const token = await emailExist.generateAuthToken();
 
-        res.cookie("jwtoken", token, {
-            expires: new Date(Date.now() + 2592000000),
-            httpOnly: true
-        });
-
         if (isMatch)
         {
+            res.cookie("jwtoken", token, {
+                expires: new Date(Date.now() + 2592000000),
+                httpOnly: true
+            });
+            
             return res.status(200).json({message: "User login successfully."})
         }
 
@@ -103,7 +104,7 @@ router.post("/addnewpassword", authenticate, async (req, res) =>
 {
     const { platform, userPass, userEmail, platEmail } = req.body;
 
-    if (!platform || !userPass || !userEmail)
+    if (!platform || !userPass || !userEmail || !platEmail)
     {
         return res.status(400).json({ error: "Please fill the form properly" });
     }
@@ -112,7 +113,11 @@ router.post("/addnewpassword", authenticate, async (req, res) =>
     {
         const rootUser = req.rootUser;
 
-        const isSaved = rootUser.addNewPassword(userPass, platform, platEmail);
+        
+        const { iv, encryptedPassword } = encrypt(userPass);
+        
+        const isSaved = await rootUser.addNewPassword(encryptedPassword, iv,platform, platEmail);
+        // const isSaved = User.updateOne({email: rootUser.email}, {$push: {passwords: data}});
 
         if (isSaved)
         {
@@ -143,6 +148,7 @@ router.post("/deletepassword", authenticate,  async (req, res) =>
     try
     {
         const rootUser = req.rootUser;
+        
         const isDeleted = await User.updateOne({ email: rootUser.email }, { $pull: { passwords: { _id : id }}});
 
         if (!isDeleted)
@@ -155,6 +161,19 @@ router.post("/deletepassword", authenticate,  async (req, res) =>
     catch(err) {
         console.log(err);
     }
+})
+
+router.get("/logout", (req, res) =>
+{
+    res.clearCookie("jwtoken", {path: "/"});
+    res.status(200).send("Logout");
+})
+
+router.post("/decrypt", (req, res) =>
+{
+    const { iv, encryptedPassword } = req.body;
+
+    return res.status(200).send(decrypt(encryptedPassword, iv));
 })
 
 
