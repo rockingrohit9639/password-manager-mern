@@ -3,9 +3,10 @@ import "./Password.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Showcase from './Showcase';
+import Showcase from '../../Pages/Passwords/Showcase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { decryptThePass, deleteAPassword } from "../../axios/instance";
 
 function Password({ id, name, password, email, verifyUser, iv })
 {
@@ -16,21 +17,11 @@ function Password({ id, name, password, email, verifyUser, iv })
     {
         try
         {
-            const res = await fetch("/deletepassword", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: id,
-                })
-            })
-
-            const jsonRes = await res.json();
+            const res = await deleteAPassword({id});
 
             if (res.status === 400)
             {
-                toast.error(jsonRes.error, {
+                toast.error(res.data.error, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -43,7 +34,7 @@ function Password({ id, name, password, email, verifyUser, iv })
             }
             else if (res.status === 200)
             {
-                toast.success(jsonRes.message, {
+                toast.success(res.data.message, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -68,22 +59,14 @@ function Password({ id, name, password, email, verifyUser, iv })
         {
             if (!show)
             {
-                const res = await fetch("/decrypt", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        iv: iv,
-                        encryptedPassword: password,
-                    })
-                })
-    
-                const resText = await res.text();
-                
+                const res = await decryptThePass({
+                    iv: iv,
+                    encryptedPassword: password,
+                });
+
                 if (res.status === 200)
                 {
-                    setDecPassword(resText);
+                    setDecPassword(res.data);
                     setShow(!show);
                 }
             }
@@ -91,7 +74,7 @@ function Password({ id, name, password, email, verifyUser, iv })
             {
                 setShow(!show);
             }
-            
+
         }
         catch (error)
         {
@@ -117,9 +100,9 @@ function Password({ id, name, password, email, verifyUser, iv })
 
             <div className="user-password">
 
-                <input type={ show ? "text" : "password"} value={decPassword} disabled={true} />
+                <input type={show ? "text" : "password"} value={decPassword} disabled={true} />
 
-                <FontAwesomeIcon icon={faEyeSlash} onClick={ decryptPassword } />
+                <FontAwesomeIcon icon={faEyeSlash} onClick={decryptPassword} />
 
             </div>
 

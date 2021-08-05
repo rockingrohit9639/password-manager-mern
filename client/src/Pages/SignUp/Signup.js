@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import "./Signup.css";
 import { Link, useHistory } from "react-router-dom";
-import img from "../../static/signup.jpg";
+import img from "../../assets/images/signup.jpg";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
+import { signupUser } from '../../axios/instance';
 
 function Signup()
 {
@@ -18,7 +19,7 @@ function Signup()
     const handleChange = (e) =>
     {
         const { name, value } = e.target;
-        
+
         setUserData((prevData) =>
         {
             return {
@@ -32,19 +33,11 @@ function Signup()
     {
         try
         {
-            const res = await fetch("http://localhost:8000/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData)
-            });
-
-            const jsonRes = await res.json();
+            const res = await signupUser(userData);
 
             if (res.status === 400)
             {
-                toast.error(jsonRes.error, {
+                toast.error(res.data.error, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -63,7 +56,7 @@ function Signup()
                     cpassword: ""
                 });
 
-                toast.success(jsonRes.message, {
+                toast.success(res.data.message, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -74,7 +67,7 @@ function Signup()
                 });
 
                 history.push("/signin");
-                
+
             }
         }
         catch (error)
@@ -90,7 +83,7 @@ function Signup()
 
 
                 <div className="signup__left">
-                    
+
                     <div className="inputs">
                         <label> Full Name </label>
                         <input type="text" placeholder="Full Name" name="name" autoComplete={"off"} onChange={handleChange} value={userData.name} required />
@@ -111,6 +104,10 @@ function Signup()
                         <label> Confirm Password </label>
                         <input type="password" placeholder="Confirm Password" name="cpassword" onChange={handleChange} required value={userData.cpassword} />
                     </div>
+
+                    <p>
+                        Alredy have an account? <Link to="/signin">Login</Link>
+                    </p>
 
                     <button onClick={handleRegister}> SignUp </button>
                 </div>

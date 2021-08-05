@@ -1,0 +1,106 @@
+.navbar {
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10vw;
+  position: fixed;
+  top: 0;
+  background-color: var(--primary-bg);
+  z-index: 5;
+}
+
+.navbar .navbar__left h2 a {
+  text-decoration: none;
+  color: #4ae3b5;
+}
+
+.navbar .navbar__right .rignavbar__rightht__menu {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  transition: all 0.5s ease;
+}
+
+.navbar .navbar__right .right__menu ul {
+  display: flex;
+  list-style-type: none;
+}
+
+.navbar .navbar__right .right__menu ul li a {
+  text-decoration: none;
+  font-weight: 100;
+  font-size: 1.1rem;
+  padding: 0 0.5rem;
+  color: #ffffff;
+}
+
+.navbar .navbar__right .right__menu ul li a:hover {
+  color: #4ae3b5;
+}
+
+.menu__icon {
+  color: #fff;
+  display: none;
+  cursor: pointer;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+.phone__nav {
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%);
+  z-index: 100;
+}
+
+.back {
+  padding: 2rem 10vw;
+}
+
+.back__button {
+  color: #fff;
+  cursor: pointer;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+.phone__nav ul {
+  margin-top: 2rem;
+  list-style-type: none;
+}
+
+.phone__nav ul li a {
+  text-decoration: none;
+  color: #fff;
+  display: inline-block;
+  transition: 0.2s ease-in-out all;
+  padding: 1.5rem 10vw;
+  cursor: pointer;
+  width: 100%;
+}
+
+.phone__nav ul li a:hover {
+  background-color: #4ae3b5;
+}
+
+@media only screen and (max-width: 800px) {
+  .right__menu {
+    display: none;
+  }
+
+  .menu__icon {
+    display: block;
+  }
+}

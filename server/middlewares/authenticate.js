@@ -6,9 +6,7 @@ const authenticate = async (req, res, next) =>
 {
     try
     {
-        const tokenStr = req.headers.cookie;
-        const splitToken = tokenStr.split("=");
-        const token = splitToken[1];
+        const token = req.cookies.jwtoken;
         const verify = jwt.verify(token, process.env.SECRET_KEY);
 
         var rootUser = await User.findOne({ _id: verify._id, "tokens.token": token });
@@ -27,7 +25,7 @@ const authenticate = async (req, res, next) =>
     catch (error)
     {
         res.status(400).json({error: "Unauthorised user."})
-        console.log(error)
+        console.log(">>>>>>>>>>>>>>>>>>>",error);
     }
     
 };

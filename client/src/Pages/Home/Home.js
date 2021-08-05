@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
+import { checkAuthenticated } from "../../axios/instance";
+
 function Home()
 {
     const [isAuthenticated, setAuth] = useState(false);
@@ -9,16 +11,7 @@ function Home()
     {
         try
         {
-            const res = await fetch("/authenticate", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-            });
-
-            const json = await res.json();
+            const res = await checkAuthenticated();
 
             if (res.status === 400)
             {
@@ -26,7 +19,7 @@ function Home()
             }
             else
             {
-                const { name } = json;
+                const { name } = res.data;
                 setAuth(true);
 
                 setName(name);

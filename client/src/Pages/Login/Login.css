@@ -1,6 +1,6 @@
 .login {
   width: 100%;
-  height: 93vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,8 +33,8 @@
 .login__wrapper {
   width: 85%;
   height: 80%;
-  background-color: var(--secondary-bg);
   border-radius: 13px;
+  margin-top: 4rem;
 }
 
 .login_left {
@@ -45,6 +45,14 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  backdrop-filter: blur(40px);
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.425);
+}
+
+.login_left p {
+  font-size: 0.7rem;
+  padding: 1rem 0;
 }
 
 .inputs {

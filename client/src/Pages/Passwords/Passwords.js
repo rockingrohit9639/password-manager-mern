@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import Password from './Password';
+import Password from '../../Components/Password/Password';
 import "./Passwords.css";
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
+import { checkAuthenticated, saveNewPassword } from '../../axios/instance';
 
 
 function Passwords()
@@ -30,26 +31,15 @@ function Passwords()
     {
         try
         {
-            const res = await fetch("/authenticate", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-            });
-
-            const jsonRes = await res.json();
+            const res = await checkAuthenticated();
 
             if (res.status === 400)
             {
-                history.push("/signin");
+                history.replace("/signin");
             }
             else
             {
-                const { name, passwords, email } = jsonRes;
-
-                console.log(passwords)
+                const { name, passwords, email } = res.data;
 
                 setName(name);
                 setUserEmail(email)
@@ -62,28 +52,22 @@ function Passwords()
         }
     }
 
-    const addNewPassword = async () => {
+    const addNewPassword = async () =>
+    {
         try
         {
             const data = {
                 platform: platform,
                 userPass: userPass,
-                platEmail: platEmail, 
+                platEmail: platEmail,
                 userEmail: userEmail,
             }
-            const res = await fetch("/addnewpassword", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-            })
 
-            const jsonRes = await res.json();
+            const res = await saveNewPassword(data);
 
             if (res.status === 400)
             {
-                toast.error(jsonRes.error, {
+                toast.error(res.data.error, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -99,8 +83,8 @@ function Passwords()
                 setPlatEmail("");
                 setUserPass("");
                 setOpen(false);
-                
-                toast.success(jsonRes.message, {
+
+                toast.success(res.data.message, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -126,7 +110,7 @@ function Passwords()
     return (
         <div className="passwords">
             <ToastContainer />
-            <h1> Welcome <span className="name"> { name } </span> </h1>
+            <h1> Welcome <span className="name"> {name} </span> </h1>
 
             <div className="modal">
                 <button className="modalButton" onClick={onOpenModal}> Add New Password</button>
@@ -136,12 +120,12 @@ function Passwords()
                     <div className="form">
                         <div className="form__inputs">
                             <label> Platform </label>
-                            <input type="text" placeholder="E.g. Facebook" value={platform} onChange={ (e) => setPlatform(e.target.value) }/>
+                            <input type="text" placeholder="E.g. Facebook" value={platform} onChange={(e) => setPlatform(e.target.value)} />
                         </div>
 
                         <div className="form__inputs">
                             <label> Email </label>
-                            <input type="email" placeholder="E.g. rohitsaini@gmail.com" value={platEmail} onChange={ (e) => setPlatEmail(e.target.value) }/>
+                            <input type="email" placeholder="E.g. rohitsaini@gmail.com" value={platEmail} onChange={(e) => setPlatEmail(e.target.value)} />
                         </div>
 
                         <div className="form__inputs">
@@ -160,8 +144,8 @@ function Passwords()
 
 
             <div className="passwords__list">
-                
-                { userPasswords.length !== 0 ? userPasswords?.map((data) =>
+
+                {userPasswords.length !== 0 ? userPasswords?.map((data) =>
                 {
                     return (
                         <Password
@@ -171,17 +155,17 @@ function Passwords()
                             password={data.password}
                             email={data.platEmail}
                             iv={data.iv}
-                            verifyUser={verifyUser}    
+                            verifyUser={verifyUser}
                         />
                     )
                 }) :
-                    
+
                     <div className="nopass">
                         <p> You have not added any passwords yet. </p>
                         <button className="modalButton" onClick={onOpenModal}> Try Adding a password now </button>
                     </div>
-                 }
-            
+                }
+
             </div>
         </div>
     )
