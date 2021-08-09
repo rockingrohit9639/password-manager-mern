@@ -6,13 +6,19 @@ import Navbar from './Components/Navbar/Navbar';
 import Signup from './Pages/SignUp/Signup';
 import Passwords from './Pages/Passwords/Passwords';
 import Logout from './Pages/Logout/Logout';
+import { useSelector, useDispatch } from "react-redux";
 
-function App() {
+function App()
+{
+
+  const data = useSelector(state => state);
+  console.log(data);
+
   return (
     <div className="App">
-      
+
       <Router>
-      
+
         <Navbar />
 
         <Switch>

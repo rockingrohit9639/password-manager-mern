@@ -7,6 +7,7 @@ function Home()
 {
     const [isAuthenticated, setAuth] = useState(false);
     const [name, setName] = useState("");
+    
     const verifyUser = async () =>
     {
         try
@@ -23,6 +24,7 @@ function Home()
                 setAuth(true);
 
                 setName(name);
+                console.log(res.data)
 
             }
         }
