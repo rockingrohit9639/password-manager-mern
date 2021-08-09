@@ -1,6 +1,6 @@
 .signup {
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,11 +48,13 @@
   backdrop-filter: blur(40px);
   border-radius: 0.5rem;
   background-color: rgba(255, 255, 255, 0.425);
-}
-
-.signup__left {
   font-size: 0.7rem;
   padding: 1rem 0;
+}
+
+.signup__left p, .signup__left p a {
+  color: #FFF;
+  font-size: 1rem;
 }
 
 .inputs {
@@ -65,14 +67,20 @@
 
 .inputs input {
   margin-top: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.7rem;
   border: none;
   outline: none;
   border-radius: 5px;
+  font-size: 1rem;
+}
+
+.inputs label {
+  font-size: 0.8rem;
 }
 
 .signup__left button {
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.5rem;
+  margin-top: 1rem;
   cursor: pointer;
   border: none;
   outline: none;

@@ -7,16 +7,15 @@ import Navbar from './Components/Navbar/Navbar';
 import Signup from './Pages/SignUp/Signup';
 import Passwords from './Pages/Passwords/Passwords';
 import Logout from './Pages/Logout/Logout';
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setAuth, setName, setEmail, setPasswords } from "./redux/actions";
 import { checkAuthenticated } from "./axios/instance";
 
 function App()
 {
 
+  const isAuthenticated = useSelector(state => state.isAuthenticated);
   const dispatch = useDispatch();
-
-
 
   useEffect(() =>
   {
@@ -26,7 +25,7 @@ function App()
       {
         const res = await checkAuthenticated();
 
-        if (res.status === 400)
+        if (res.status !== 200)
         {
           dispatch(setAuth(false));
         }
@@ -46,7 +45,7 @@ function App()
       }
     }
     verifyUser();
-  }, []);
+  }, [isAuthenticated, dispatch]);
 
   return (
     <div className="App">

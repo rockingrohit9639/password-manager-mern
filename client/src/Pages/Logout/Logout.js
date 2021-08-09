@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { logoutUser } from '../../axios/instance';
+import { useDispatch } from "react-redux";
+import { setAuth } from '../../redux/actions';
+
 
 function Logout()
 {
 
     const history = useHistory();
+    const dispatch = useDispatch();
 
     useEffect(() =>
     {
@@ -16,6 +20,7 @@ function Logout()
                 const res = await logoutUser();
                 if (res.status === 200)
                 {
+                    dispatch(setAuth(false));
                     history.replace("/signin");
                 }
                 else
@@ -33,7 +38,7 @@ function Logout()
     }, [history])
     return (
         <div className="logout">
-            logout page
+            Logging you out...
         </div>
     )
 }

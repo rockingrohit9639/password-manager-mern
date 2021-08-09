@@ -5,7 +5,8 @@ import img from "../../assets/images/login.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginUser } from "../../axios/instance";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setAuth } from "../../redux/actions";
 
 function Login()
 {
@@ -15,6 +16,7 @@ function Login()
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
 
   const handleChange = (e) =>
   {
@@ -48,6 +50,7 @@ function Login()
         });
       } else if (res.status === 200)
       {
+        dispatch(setAuth(true));
         history.push("/");
       }
     } catch (error)

@@ -6,10 +6,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { signupUser } from '../../axios/instance';
 import { useSelector } from "react-redux";
+import ReactLoading from 'react-loading';
 
 function Signup()
 {
     const isAuthenticated = useSelector(state => state.isAuthenticated);
+    const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
     const [userData, setUserData] = useState({
         name: "",
@@ -33,6 +35,7 @@ function Signup()
 
     const handleRegister = async () =>
     {
+        setIsLoading(true);
         try
         {
             const res = await signupUser(userData);
@@ -48,6 +51,7 @@ function Signup()
                     draggable: true,
                     progress: undefined,
                 });
+                setIsLoading(false);
             }
             else if (res.status === 201)
             {
@@ -68,6 +72,7 @@ function Signup()
                     progress: undefined,
                 });
 
+                setIsLoading(false);
                 history.push("/signin");
 
             }
@@ -116,6 +121,7 @@ function Signup()
                         Alredy have an account? <Link to="/signin">Login</Link>
                     </p>
 
+                    { isLoading && <ReactLoading type={"balls"} color={"#ff1f5a"} height={20} width={20} />}
                     <button onClick={handleRegister}> SignUp </button>
                 </div>
 
