@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 import img from "../../assets/images/login.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginUser } from "../../axios/instance";
+import { useSelector } from "react-redux";
 
 function Login()
 {
+  const isAuthenticated = useSelector(state => state.isAuthenticated);
   const history = useHistory();
   const [userData, setUserData] = useState({
     email: "",
@@ -53,6 +55,11 @@ function Login()
       console.log(error);
     }
   };
+
+  useEffect(() =>
+  {
+    isAuthenticated && history.replace("/");
+  }, [isAuthenticated, history]);
 
   return (
     <div className="login">
@@ -111,15 +118,15 @@ function Login()
             <h4> Get your password secured with us for free. </h4>
 
             <p>
-              {" "}
               Did not have any Account?
-              <Link to="/signup"> Signup </Link>{" "}
+              <Link to="/signup"> Signup </Link>
             </p>
 
             <a
               className="attr"
               href="https://www.freepik.com/vectors/star"
               target="_blank"
+              rel="noreferrer"
             >
               Star vector created by vectorpouch - www.freepik.com
             </a>

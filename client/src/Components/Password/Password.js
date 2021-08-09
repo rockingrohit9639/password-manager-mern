@@ -3,21 +3,24 @@ import "./Password.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Showcase from '../../Pages/Passwords/Showcase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { decryptThePass, deleteAPassword } from "../../axios/instance";
+import { delPass } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
-function Password({ id, name, password, email, verifyUser, iv })
+function Password({ id, name, password, email, iv })
 {
     const [show, setShow] = useState(false);
     const [decPassword, setDecPassword] = useState("");
+
+    const dispatch = useDispatch();
 
     const deletePassword = async () =>
     {
         try
         {
-            const res = await deleteAPassword({id});
+            const res = await deleteAPassword({ id });
 
             if (res.status === 400)
             {
@@ -30,10 +33,10 @@ function Password({ id, name, password, email, verifyUser, iv })
                     draggable: true,
                     progress: undefined,
                 });
-                verifyUser();
             }
             else if (res.status === 200)
             {
+                dispatch(delPass(id));
                 toast.success(res.data.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -43,7 +46,6 @@ function Password({ id, name, password, email, verifyUser, iv })
                     draggable: true,
                     progress: undefined,
                 });
-                verifyUser();
             }
         }
         catch (err)
@@ -87,8 +89,8 @@ function Password({ id, name, password, email, verifyUser, iv })
             <ToastContainer />
             <div className="media">
 
-                {<Showcase mediaIcon={name} />}
-                <h3> {name} </h3>
+                <i className={`fab fa-${ name.toLowerCase() }`}></i>
+                <h3 className="password__name"> {name} </h3>
 
                 {<FontAwesomeIcon className="delete__btn1" onClick={deletePassword} icon={faTrash} />}
 

@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 10vw;
-  position: fixed;
+  position: sticky;
   top: 0;
   background-color: var(--primary-bg);
   z-index: 5;

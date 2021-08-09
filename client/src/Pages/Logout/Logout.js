@@ -7,8 +7,6 @@ function Logout()
 
     const history = useHistory();
 
-
-
     useEffect(() =>
     {
         const logout = async () =>
@@ -32,7 +30,7 @@ function Logout()
         }
         logout();
 
-    }, [])
+    }, [history])
     return (
         <div className="logout">
             logout page

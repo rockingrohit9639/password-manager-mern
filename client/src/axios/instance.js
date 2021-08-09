@@ -14,7 +14,7 @@ const instance = axios.create({
 
 export const checkAuthenticated = () => instance.get("/authenticate");
 export const loginUser = (data) => instance.post("/login", data); 
-export const logoutUser = () => instance.post("/logout");
+export const logoutUser = () => instance.get("/logout");
 export const signupUser = (data) => instance.post("/register", data);
 export const saveNewPassword = (data) => instance.post("/addnewpassword", data);
 export const deleteAPassword = (id) => instance.post("/deletepassword", id);

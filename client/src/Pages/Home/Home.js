@@ -1,48 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
-import { checkAuthenticated } from "../../axios/instance";
+import { useSelector } from "react-redux";
 
 function Home()
 {
-    const [isAuthenticated, setAuth] = useState(false);
-    const [name, setName] = useState("");
-    
-    const verifyUser = async () =>
-    {
-        try
-        {
-            const res = await checkAuthenticated();
+    const { name, isAuthenticated } = useSelector(state => state);
 
-            if (res.status === 400)
-            {
-                setAuth(false);
-            }
-            else
-            {
-                const { name } = res.data;
-                setAuth(true);
-
-                setName(name);
-                console.log(res.data)
-
-            }
-        }
-        catch (error)
-        {
-            console.log(error)
-        }
-    }
-    useEffect(() =>
-    {
-        verifyUser();
-    }, []);
-
-    
     return (
         <div className="home">
 
-            { !isAuthenticated ? (
+            {!isAuthenticated ? (
                 <div className="home__left">
                     <h1> Welcome to <span className="name"> Password Manager </span> </h1>
 
@@ -53,7 +21,7 @@ function Home()
             ) :
                 (
                     <div className="home__left">
-                        <h1> Welcome <span className="name"> { name } </span> </h1>
+                        <h1> Welcome <span className="name"> {name} </span> </h1>
 
                         <p> Hope you are doing well. </p>
 
@@ -61,8 +29,6 @@ function Home()
                     </div>
                 )
             }
-
-
         </div>
     )
 }

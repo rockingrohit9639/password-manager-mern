@@ -117,7 +117,6 @@ router.post("/addnewpassword", authenticate, async (req, res) =>
         const { iv, encryptedPassword } = encrypt(userPass);
 
         const isSaved = await rootUser.addNewPassword(encryptedPassword, iv, platform, platEmail);
-        // const isSaved = User.updateOne({email: rootUser.email}, {$push: {passwords: data}});
 
         if (isSaved)
         {

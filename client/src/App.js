@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from './Pages/Home/Home';
@@ -6,13 +7,46 @@ import Navbar from './Components/Navbar/Navbar';
 import Signup from './Pages/SignUp/Signup';
 import Passwords from './Pages/Passwords/Passwords';
 import Logout from './Pages/Logout/Logout';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setAuth, setName, setEmail, setPasswords } from "./redux/actions";
+import { checkAuthenticated } from "./axios/instance";
 
 function App()
 {
 
-  const data = useSelector(state => state);
-  console.log(data);
+  const dispatch = useDispatch();
+
+
+
+  useEffect(() =>
+  {
+    const verifyUser = async () =>
+    {
+      try
+      {
+        const res = await checkAuthenticated();
+
+        if (res.status === 400)
+        {
+          dispatch(setAuth(false));
+        }
+        else
+        {
+          const { name, email, passwords } = res.data;
+
+          dispatch(setAuth(true));
+          dispatch(setName(name));
+          dispatch(setEmail(email));
+          dispatch(setPasswords(passwords));
+        }
+      }
+      catch (error)
+      {
+        console.log(error)
+      }
+    }
+    verifyUser();
+  }, []);
 
   return (
     <div className="App">

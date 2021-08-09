@@ -6,26 +6,24 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { checkAuthenticated, saveNewPassword } from '../../axios/instance';
+import { saveNewPassword, checkAuthenticated } from '../../axios/instance';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAuth, setPasswords } from "../../redux/actions";
 
 
 function Passwords()
 {
 
-    const [name, setName] = useState("");
-    const [userEmail, setUserEmail] = useState("");
-    const [userPasswords, setPasswords] = useState([]);
-
     const [platform, setPlatform] = useState("");
     const [platEmail, setPlatEmail] = useState("");
-    const [userPass, setUserPass] = useState("");
+    const [platPass, setPlatPass] = useState("");
 
     const [open, setOpen] = useState(false);
 
-    const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
-
     const history = useHistory();
+
+    const { isAuthenticated, name, email, passwords } = useSelector(state => state);
+    const dispatch = useDispatch();
 
     const verifyUser = async () =>
     {
@@ -35,15 +33,12 @@ function Passwords()
 
             if (res.status === 400)
             {
-                history.replace("/signin");
+                dispatch(setAuth(false));
             }
             else
             {
-                const { name, passwords, email } = res.data;
-
-                setName(name);
-                setUserEmail(email)
-                setPasswords(passwords);
+                const { passwords } = res.data;
+                dispatch(setPasswords(passwords));
             }
         }
         catch (error)
@@ -58,9 +53,9 @@ function Passwords()
         {
             const data = {
                 platform: platform,
-                userPass: userPass,
+                userPass: platPass,
                 platEmail: platEmail,
-                userEmail: userEmail,
+                userEmail: email,
             }
 
             const res = await saveNewPassword(data);
@@ -79,11 +74,8 @@ function Passwords()
             }
             else if (res.status === 200)
             {
-                setPlatform("");
-                setPlatEmail("");
-                setUserPass("");
                 setOpen(false);
-
+                verifyUser();
                 toast.success(res.data.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -93,7 +85,10 @@ function Passwords()
                     draggable: true,
                     progress: undefined,
                 });
-                verifyUser();
+
+                setPlatform("");
+                setPlatEmail("");
+                setPlatPass("");
             }
         }
         catch (error)
@@ -104,8 +99,8 @@ function Passwords()
 
     useEffect(() =>
     {
-        verifyUser();
-    }, []);
+        !isAuthenticated && history.replace("/signin");
+    }, [isAuthenticated, history]);
 
     return (
         <div className="passwords">
@@ -113,9 +108,9 @@ function Passwords()
             <h1> Welcome <span className="name"> {name} </span> </h1>
 
             <div className="modal">
-                <button className="modalButton" onClick={onOpenModal}> Add New Password</button>
+                <button className="modalButton" onClick={() => setOpen(true)}> Add New Password</button>
 
-                <Modal open={open} onClose={onCloseModal}>
+                <Modal open={open} onClose={() => setOpen(false)}>
                     <h2>Add a new password</h2>
                     <div className="form">
                         <div className="form__inputs">
@@ -131,7 +126,7 @@ function Passwords()
                         <div className="form__inputs">
                             <label> Password </label>
                             <input type="password" placeholder="Password"
-                                value={userPass} onChange={(e) => setUserPass(e.target.value)}
+                                value={platPass} onChange={(e) => setPlatPass(e.target.value)}
                             />
                         </div>
 
@@ -145,7 +140,7 @@ function Passwords()
 
             <div className="passwords__list">
 
-                {userPasswords.length !== 0 ? userPasswords?.map((data) =>
+                {passwords?.length !== 0 ? passwords?.map((data) =>
                 {
                     return (
                         <Password
@@ -155,14 +150,13 @@ function Passwords()
                             password={data.password}
                             email={data.platEmail}
                             iv={data.iv}
-                            verifyUser={verifyUser}
                         />
                     )
                 }) :
 
                     <div className="nopass">
                         <p> You have not added any passwords yet. </p>
-                        <button className="modalButton" onClick={onOpenModal}> Try Adding a password now </button>
+                        <button className="modalButton" onClick={() => setOpen(true)}> Try Adding a password now </button>
                     </div>
                 }
 
